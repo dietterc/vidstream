@@ -1,0 +1,57 @@
+IDEAS:
+
+User friendly logins
+script to make downloading really easy (python?)
+	- each series has a tag (ex: 'hunterxhunter')
+	- so putting in 'hunterxhunter 10' downloads 10th episode of hxh
+	- episode ranges? (1-10, all, first, etc)
+
+bat file that does the above?
+
+
+Client side mainly 
+asks for input, then translates the input into a link, then connects to the server 
+Connected to a spreadsheet for matching links 
+spreadsheet format could be:
+searchterm path num-episodes(or array of episodes) 
+or
+searchterm -a alias-number 	//used so we could have multiple serch terms for the same show 
+				//alias number is the cell distance to the cell with the path 
+
+
+TODO: -----------
+
+fix 32bit vs 64bit vlc installs 
+Add flavour and alias box 
+add config file -- YAML
+
+---------- What I want to be able to do: -------------
+
+import from within the main program. 
+Remove from the main program 
+
+feedback while typing a show 
+	press 'a' - show a list of all shows that have start with able
+	press 'at' - show shows that start with at 
+	etc. 
+
+user accounts? - login when the program opens 
+	different accounts given to whoever I give this too? 
+	only certian accounts can add/remove shows 
+	so I can see whos using it and revoke access 
+
+Option to open the video locally (not vlc) 
+
+Let the user fill in the path to vlc themselves 
+
+press enter to auto play 
+
+cover art per show
+
+
+https://docs.python.org/2/library/multiprocessing.html#module-multiprocessing
+
+
+chromecast 
+	see github starred repo 
+
