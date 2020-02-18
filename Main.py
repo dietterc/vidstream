@@ -5,6 +5,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import subprocess
 import math
+import yaml
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
@@ -16,19 +17,20 @@ dataSheet = client.open("streaming database").sheet1
 
 operatingSystem = platform.system() #Darwin or Windows 
 
-#showsRaw = dataSheet.cell(1,2).value.split(",")
-
 allData = dataSheet.get_all_values()
 showDict = {}
 
 for x in allData:
     showDict[x[0]] = x[1:]
 
-var = 2
 
+#load config
+with open("config.yml", 'r') as ymlfile:
+    cfg = yaml.load(ymlfile, Loader=yaml.BaseLoader)
 
-#    showList
+serverConfig = cfg['server']
 
+serverPass = serverConfig['password']
 
 def main():
 
@@ -120,9 +122,9 @@ def checkVLC():
 #shows need to be concatenated, movies contain everything needed in path
 def stream(media, episode, local):
     if local:
-        linkBeginning = "sftp://stream:Anime98*@192.168.0.41"
+        linkBeginning = "sftp://stream:"+ serverPass +"@192.168.0.41"
     else:
-        linkBeginning = "sftp://stream:Anime98*@50.71.198.164"
+        linkBeginning = "sftp://stream:"+ serverPass +"@50.71.198.164"
 
     media = sanitizeStr(media)
 
@@ -180,7 +182,7 @@ def sanitizeStr(string):
 # onvalue="sftp://stream@50.71.198.164" offvalue="sftp://stream@192.168.0.41"
 
 def download(media, episode):
-    print(var)
+    
     showData = getShowInfo(media)
     if showData == -1:
         print("not found")
