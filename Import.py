@@ -4,8 +4,17 @@ import paramiko
 from scp import SCPClient
 import os
 import sys
+import yaml
 
 import re #for the fancy sort
+
+#load config
+with open("config.yml", 'r') as ymlfile:
+    cfg = yaml.load(ymlfile, Loader=yaml.BaseLoader)
+
+serverConfig = cfg['server']
+
+serverPass = serverConfig['password']
 
 #get user input
 inp = input("Ready: (type directory searchterm(spaces as dashes) external/internal)\n")
@@ -45,9 +54,9 @@ def createSSHClient(server, port, user, password):
     return client
 
 if params[3] == 'i':
-    ssh = createSSHClient("192.168.0.41", "22", "stream", "Anime98*")
+    ssh = createSSHClient("192.168.0.41", "22", "stream", serverPass)
 if params[3] == 'e':
-    ssh = createSSHClient("50.71.198.164", "22", "stream", "Anime98*")
+    ssh = createSSHClient("50.71.198.164", "22", "stream", serverPass)
 
 scp = SCPClient(ssh.get_transport())
 
