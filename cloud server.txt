@@ -48,6 +48,11 @@ press enter to auto play
 
 cover art per show
 
+play next episode button
+
+auto update the last watched
+	so I dont have to restart the program to see it
+
 
 https://docs.python.org/2/library/multiprocessing.html#module-multiprocessing
 
