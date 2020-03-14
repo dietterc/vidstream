@@ -6,6 +6,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import subprocess
 import math
 import yaml
+from tkinter import filedialog
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
@@ -25,12 +26,16 @@ for x in allData:
 
 
 #load config
-with open("config.yml", 'r') as ymlfile:
+with open("config.yml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.BaseLoader)
 
 serverConfig = cfg['server']
+optionsConfig = cfg['options']
 
 serverPass = serverConfig['password']
+serverUser = serverConfig['user']
+localIP = serverConfig['local_address']
+externalIP = serverConfig['external_address']
 
 def main():
 
@@ -122,9 +127,9 @@ def checkVLC():
 #shows need to be concatenated, movies contain everything needed in path
 def stream(media, episode, local):
     if local:
-        linkBeginning = "sftp://stream:"+ serverPass +"@192.168.0.41"
+        linkBeginning = "sftp://"+ serverUser +":"+ serverPass + "@" + localIP
     else:
-        linkBeginning = "sftp://stream:"+ serverPass +"@50.71.198.164"
+        linkBeginning = "sftp://" + serverUser + ":"+ serverPass +"@" + externalIP
 
     media = sanitizeStr(media)
 
@@ -241,6 +246,15 @@ def VLCPath(window):
     newWin = tkinter.Toplevel(window)
     newWin.geometry("400x150+500+500")
     newWin.configure(background='gray')
+    
+    def clickBrowse():
+        givenPath = filedialog.askopenfilename(initialdir = "/",title = "Select VLC",filetypes=[("Application", "*.app *.exe")])
+        optionsConfig["vlc_path"] = givenPath
+        cfg['options'] = optionsConfig
+        with open("config.yml", "w") as ymlfile:
+            yaml.dump(cfg, ymlfile)
 
+
+    clickBrowse()
 
 main()
