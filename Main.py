@@ -116,11 +116,10 @@ def initWindow():
     def callVLCPath():
         VLCPath(window)
 
-    menubar.add_command(label="Options", command=test)
 
     optionsmenu = tkinter.Menu(menubar, tearoff=0)
     optionsmenu.add_command(label="Set VLC path", command=callVLCPath)
-    optionsmenu.add_command(label="placeholder", command=test)
+    optionsmenu.add_command(label="Change mode (internal/external)", command=test)
     optionsmenu.add_separator()
     optionsmenu.add_command(label="Exit", command=window.quit)
     menubar.add_cascade(label="Options", menu=optionsmenu)
@@ -258,7 +257,7 @@ def openShowList(window):
     showListSorted = []
     #copy the showList
     count = 0
-    for i in showList:
+    for i in showDict:
         if i != '1' and i != 'search term': #skip the first two
             showListSorted.append(i)
         count += 1
@@ -275,7 +274,7 @@ def openShowList(window):
         showWin.geometry("200x100+500+300")
         
     newwin = tkinter.Toplevel(window)
-    newwin.geometry("+300+300")
+    newwin.geometry("+400+400")
     newwin.configure(background='gray')
     count = 0
     c = 0
