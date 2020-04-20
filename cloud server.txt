@@ -24,6 +24,7 @@ TODO: -----------
 fix 32bit vs 64bit vlc installs 
 Add flavour and alias box 
 add config file -- YAML
+Fix local issues, no internet = no google = no loading a video from the sheet
 
 ---------- What I want to be able to do: -------------
 
@@ -53,10 +54,10 @@ play next episode button
 auto update the last watched
 	so I dont have to restart the program to see it
 
-
 https://docs.python.org/2/library/multiprocessing.html#module-multiprocessing
-
 
 chromecast 
 	see github starred repo 
 
+Raspberry pi for streaming on a tv instead of smart tv app.
+	
