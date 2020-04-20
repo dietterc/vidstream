@@ -8,6 +8,15 @@ import math
 import yaml
 from tkinter import filedialog
 
+cfg = ''
+serverConfig = ''
+optionsConfig = ''
+serverPass = ''
+serverUser = ''
+localIP = ''
+externalIP = ''
+vlc_path = ''
+
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
@@ -26,18 +35,31 @@ for x in allData:
 
 
 #load config
-with open("config.yml", "r") as ymlfile:
-    cfg = yaml.load(ymlfile, Loader=yaml.BaseLoader)
+def loadConfig():
+    global cfg
+    global serverConfig 
+    global optionsConfig 
+    global serverPass
+    global serverUser 
+    global localIP
+    global externalIP
+    global vlc_path
 
-serverConfig = cfg['server']
-optionsConfig = cfg['options']
+    with open("config.yml", "r") as ymlfile:
+        cfg = yaml.load(ymlfile, Loader=yaml.BaseLoader)
 
-serverPass = serverConfig['password']
-serverUser = serverConfig['user']
-localIP = serverConfig['local_address']
-externalIP = serverConfig['external_address']
+    serverConfig = cfg['server']
+    optionsConfig = cfg['options']
+
+    serverPass = serverConfig['password']
+    serverUser = serverConfig['user']
+    localIP = serverConfig['local_address']
+    externalIP = serverConfig['external_address']
+
+    vlc_path = optionsConfig['vlc_path']
 
 def main():
+    loadConfig()
 
     initWindow() #should probably be last?
 
@@ -114,18 +136,29 @@ def initWindow():
 
 def checkVLC():
 
-    if operatingSystem == "Darwin":
-        if os.path.exists(r"/Applications/VLC.app"):
-            return True
+    if vlc_path == 'default':
 
-    if operatingSystem == "Windows":
-        if os.path.exists(r"C:\Program Files\VideoLAN\VLC\vlc.exe"):
-            return True
+        if operatingSystem == "Darwin":
+            if os.path.exists(r"/Applications/VLC.app"):
+                return True
+
+        if operatingSystem == "Windows":
+            if os.path.exists(r"C:\Program Files\VideoLAN\VLC\vlc.exe"):
+                return True
+    else:
+        if os.path.exists(vlc_path):
+                return True
 
     return False
 
 #shows need to be concatenated, movies contain everything needed in path
 def stream(media, episode, local):
+    global serverUser
+    global serverPass 
+    global localIP
+    global externalIP
+    global vlc_path
+
     if local:
         linkBeginning = "sftp://"+ serverUser +":"+ serverPass + "@" + localIP
     else:
@@ -154,9 +187,15 @@ def stream(media, episode, local):
         if videoType == "m":
             link = linkBeginning + path
             if operatingSystem == "Windows":
-                subprocess.Popen(["C:/Program Files/VideoLAN/VLC/vlc.exe",link])
+                if vlc_path == 'default':
+                    subprocess.Popen(["C:/Program Files/VideoLAN/VLC/vlc.exe",link])
+                else:
+                    subprocess.Popen([vlc_path,link])
             if operatingSystem == "Darwin":
-                subprocess.call(["/usr/bin/open", "-W", "-n", "-a", "/Applications/VLC.app",link])
+                if vlc_path == 'default':
+                    subprocess.call(["/usr/bin/open", "-W", "-n", "-a", "/Applications/VLC.app",link])
+                else:
+                    subprocess.call(["/usr/bin/open", "-W", "-n", "-a", vlc_path,link])
 
             dataSheet.update_cell(1,2,media)
             return
@@ -166,10 +205,16 @@ def stream(media, episode, local):
                 episode = "0" + episode
             link = linkBeginning + path + episode + extention
             if operatingSystem == "Windows":
-                subprocess.Popen(["C:/Program Files/VideoLAN/VLC/vlc.exe",link])
+                if vlc_path == 'default':
+                    subprocess.Popen(["C:/Program Files/VideoLAN/VLC/vlc.exe",link])
+                else:
+                    subprocess.Popen([vlc_path,link])
             if operatingSystem == "Darwin":
-                subprocess.call(["/usr/bin/open", "-W", "-n", "-a", "/Applications/VLC.app",link])
-                #subprocess.Popen(["/Applications/VLC.app",link])
+                if vlc_path == 'default':
+                    subprocess.call(["/usr/bin/open", "-W", "-n", "-a", "/Applications/VLC.app",link])
+                else:
+                    subprocess.call(["/usr/bin/open", "-W", "-n", "-a", vlc_path,link])
+                
 
             dataSheet.update_cell(1,2,media + " - " + episode)
             return
@@ -243,6 +288,9 @@ def openShowList(window):
         count += 1
         
 def VLCPath(window):
+    global optionsConfig
+    global cfg
+
     newWin = tkinter.Toplevel(window)
     newWin.geometry("400x150+500+500")
     newWin.configure(background='gray')
@@ -253,6 +301,7 @@ def VLCPath(window):
         cfg['options'] = optionsConfig
         with open("config.yml", "w") as ymlfile:
             yaml.dump(cfg, ymlfile)
+        loadConfig()
 
 
     clickBrowse()
