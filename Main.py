@@ -116,10 +116,12 @@ def initWindow():
     def callVLCPath():
         VLCPath(window)
 
+    def callChangeMode():
+        changeMode(window)
 
     optionsmenu = tkinter.Menu(menubar, tearoff=0)
     optionsmenu.add_command(label="Set VLC path", command=callVLCPath)
-    optionsmenu.add_command(label="Change mode (internal/external)", command=test)
+    optionsmenu.add_command(label="Change mode (internal/external)", command=callChangeMode)
     optionsmenu.add_separator()
     optionsmenu.add_command(label="Exit", command=window.quit)
     menubar.add_cascade(label="Options", menu=optionsmenu)
@@ -304,5 +306,29 @@ def VLCPath(window):
 
 
     clickBrowse()
+
+
+def changeMode(window):
+    global optionsConfig
+    global cfg
+
+    newWin = tkinter.Toplevel(window) 
+    newWin.geometry("300x150+500+500")
+    newWin.configure(background='gray')
+    newWin.title("Mode changed")
+
+    if optionsConfig['streaming_mode'] == 'local':
+        optionsConfig['streaming_mode'] = 'external'
+    else:
+        optionsConfig['streaming_mode'] = 'local'
+
+    cfg['options'] = optionsConfig
+    with open("config.yml", "w") as ymlfile:
+        yaml.dump(cfg, ymlfile)
+    loadConfig()
+
+    tkinter.Label(newWin, text = "Changed to " + optionsConfig['streaming_mode'] + "\nstreaming mode.", background='gray',font=("Calibri 14")).place(x=70,y=20)
+    
+    tkinter.Button(newWin,text="Okay",command=newWin.destroy,background='lightgray', height=1,width=10).place(x=110,y=100)
 
 main()
