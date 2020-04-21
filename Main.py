@@ -16,6 +16,7 @@ serverUser = ''
 localIP = ''
 externalIP = ''
 vlc_path = ''
+stream_mode = ''
 
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
@@ -44,6 +45,7 @@ def loadConfig():
     global localIP
     global externalIP
     global vlc_path
+    global stream_mode
 
     with open("config.yml", "r") as ymlfile:
         cfg = yaml.load(ymlfile, Loader=yaml.BaseLoader)
@@ -57,6 +59,7 @@ def loadConfig():
     externalIP = serverConfig['external_address']
 
     vlc_path = optionsConfig['vlc_path']
+    stream_mode = optionsConfig['streaming_mode']
 
 def main():
     loadConfig()
@@ -80,31 +83,29 @@ def initWindow():
 
     #label = tkinter.Label(window, text = "reference label", background='gray').place(x=50,y=0)
 
-    def callStream1():
-        stream(showIn.get(),episodeIn.get(),True)
-    def callStream2():
-        stream(showIn.get(),episodeIn.get(),False)
+    def callStream():
+        stream(showIn.get(),episodeIn.get())
     def callDownload():
         download(showIn.get(),episodeIn.get())
 
     showIn = tkinter.Entry(window,width=20,font=("Calibri 20"))
-    showIn.place(x=115,y=80)
-    sLabel = tkinter.Label(window, text = "Show name:", background='gray',font=("Calibri 14")).place(x=115,y=50)
+    showIn.place(x=115,y=40)
+    sLabel = tkinter.Label(window, text = "Show name:", background='gray',font=("Calibri 14")).place(x=115,y=10)
 
     episodeIn = tkinter.Entry(window,width=3,font=("Calibri 20"))
-    episodeIn.place(x=115,y=150)
-    eLabel = tkinter.Label(window, text = "Episode:", background='gray',font=("Calibri 14")).place(x=115,y=120)
+    episodeIn.place(x=115,y=110)
+    eLabel = tkinter.Label(window, text = "Episode:", background='gray',font=("Calibri 14")).place(x=115,y=80)
     
-    sB = tkinter.Button(window,text="Stream\nLocal",command=callStream1,background='lightgray',
-    height=2,width=10).place(x=(WINDOW_WIDTH/4) + 87,y=235)
+    sB = tkinter.Button(window,text="Start Stream",font=("Calibri 14"),command=callStream,background='lightgray',
+    height=1,width=10).place(x=(WINDOW_WIDTH/8) + 50,y=175)
 
-    dB = tkinter.Button(window,text="Download",command=callDownload,background='lightgray',
-    height=2,width=10).place(x=(WINDOW_WIDTH/4)+220,y=235)
+    dB = tkinter.Button(window,text="Download",font=("Calibri 14"),command=callDownload,background='lightgray',
+    height=1,width=10).place(x=(WINDOW_WIDTH/8)+220,y=175)
 
-    sEB = tkinter.Button(window,text="Stream\nExternal",command=callStream2,background='lightgray',
-    height=2,width=10).place(x=(WINDOW_WIDTH/4) - 50,y=235)
+    lastWatched = tkinter.Label(window, text = "\nLast watched: " + showDict['1'][0], background='gray').place(x=(WINDOW_WIDTH/3)+5,y=220)
 
-    lastWatched = tkinter.Label(window, text = "\nLast watched: " + showDict['1'][0], background='gray').place(x=(WINDOW_WIDTH/4)-10,y=0)
+    nb = dB = tkinter.Button(window,text="Watch next",font=("Calibri 8"),command=callDownload,background='lightgray',
+    height=1).place(x=(WINDOW_WIDTH/3) + 45,y=260)
 
     def callShowList():
         openShowList(window)
@@ -153,12 +154,18 @@ def checkVLC():
     return False
 
 #shows need to be concatenated, movies contain everything needed in path
-def stream(media, episode, local):
+def stream(media, episode):
     global serverUser
     global serverPass 
     global localIP
     global externalIP
     global vlc_path
+    local = True #local by default
+
+    if vlc_path == 'local':
+        local = True
+    elif vlc_path == 'external':
+        local = False
 
     if local:
         linkBeginning = "sftp://"+ serverUser +":"+ serverPass + "@" + localIP
