@@ -87,6 +87,14 @@ def initWindow():
         stream(showIn.get(),episodeIn.get())
     def callDownload():
         download(showIn.get(),episodeIn.get())
+    def callWatchNext():
+        video = showDict['last watched'][0]
+        tokens = video.split(" - ")
+        episodeMax = int(showDict[tokens[0]][3])
+        if int(tokens[1]) < episodeMax:
+            stream(tokens[0],str(int(tokens[1]) + 1))
+        else:
+            print("No episode found.")
 
     showIn = tkinter.Entry(window,width=20,font=("Calibri 20"))
     showIn.place(x=115,y=40)
@@ -102,9 +110,9 @@ def initWindow():
     dB = tkinter.Button(window,text="Download",font=("Calibri 14"),command=callDownload,background='lightgray',
     height=1,width=10).place(x=(WINDOW_WIDTH/8)+220,y=175)
 
-    lastWatched = tkinter.Label(window, text = "\nLast watched: " + showDict['1'][0], background='gray').place(x=(WINDOW_WIDTH/3)+5,y=220)
+    lastWatched = tkinter.Label(window, text = "\nLast watched: " + showDict['last watched'][0], background='gray').place(x=(WINDOW_WIDTH/3)+5,y=220)
 
-    nb = dB = tkinter.Button(window,text="Watch next",font=("Calibri 8"),command=callDownload,background='lightgray',
+    nb = dB = tkinter.Button(window,text="Watch next",font=("Calibri 8"),command=callWatchNext,background='lightgray',
     height=1).place(x=(WINDOW_WIDTH/3) + 45,y=260)
 
     def callShowList():
