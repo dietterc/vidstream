@@ -1,12 +1,6 @@
 IDEAS:
 
 User friendly logins
-script to make downloading really easy (python?)
-	- each series has a tag (ex: 'hunterxhunter')
-	- so putting in 'hunterxhunter 10' downloads 10th episode of hxh
-	- episode ranges? (1-10, all, first, etc)
-
-bat file that does the above?
 
 
 Client side mainly 
@@ -21,9 +15,7 @@ searchterm -a alias-number 	//used so we could have multiple serch terms for the
 
 TODO: -----------
 
-fix 32bit vs 64bit vlc installs 
 Add flavour and alias box 
-add config file -- YAML
 Fix local issues, no internet = no google = no loading a video from the sheet
 
 ---------- What I want to be able to do: -------------
@@ -32,24 +24,20 @@ import from within the main program.
 Remove from the main program 
 
 feedback while typing a show 
-	press 'a' - show a list of all shows that have start with able
+	press 'a' - show a list of all shows that start with a
 	press 'at' - show shows that start with at 
 	etc. 
 
 user accounts? - login when the program opens 
-	different accounts given to whoever I give this too? 
+	different accounts given to whoever I give this to? 
 	only certian accounts can add/remove shows 
 	so I can see whos using it and revoke access 
 
 Option to open the video locally (not vlc) 
 
-Let the user fill in the path to vlc themselves 
-
 press enter to auto play 
 
 cover art per show
-
-play next episode button
 
 auto update the last watched
 	so I dont have to restart the program to see it

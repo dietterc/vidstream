@@ -42,7 +42,10 @@ if videoType != "s" and videoType != 'm' and videoType != 'a':
 if params[3] != "i" and videoType != 'e':
     sys.exit("ERROR: " + params[3] + " is not a valid param")
 
-localDir = params[1] + '/'
+if videoType == "s":
+    localDir = params[1] + '/'
+else:
+    localDir = params[1]
 searchTerm = params[2].replace("-"," ")
 
 
