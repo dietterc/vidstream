@@ -1,16 +1,3 @@
-IDEAS:
-
-User friendly logins
-
-
-Client side mainly 
-asks for input, then translates the input into a link, then connects to the server 
-Connected to a spreadsheet for matching links 
-spreadsheet format could be:
-searchterm path num-episodes(or array of episodes) 
-or
-searchterm -a alias-number 	//used so we could have multiple serch terms for the same show 
-				//alias number is the cell distance to the cell with the path 
 
 
 TODO: -----------
@@ -28,16 +15,9 @@ feedback while typing a show
 	press 'at' - show shows that start with at 
 	etc. 
 
-user accounts? - login when the program opens 
-	different accounts given to whoever I give this to? 
-	only certian accounts can add/remove shows 
-	so I can see whos using it and revoke access 
-
 Option to open the video locally (not vlc) 
 
 press enter to auto play 
-
-cover art per show
 
 auto update the last watched
 	so I dont have to restart the program to see it
